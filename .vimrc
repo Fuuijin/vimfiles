@@ -15,6 +15,7 @@ Plug 'honza/vim-snippets'
 Plug 'scrooloose/nerdtree'
 Plug 'vim-syntastic/syntastic'
 Plug 'jiangmiao/auto-pairs'
+Plug 'Roy-Orbison/nord-vim-256'
 " Plugin outside ~/.vim/plugged with post-update hook
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'ctrlpvim/ctrlp.vim'
@@ -27,7 +28,6 @@ Plug 'jparise/vim-graphql'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
-Plug 'arcticicestudio/nord-vim'
 Plug 'joshdick/onedark.vim'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -115,16 +115,20 @@ endfunction
 autocmd CursorHoldI * :call <SID>show_hover_doc()
 autocmd CursorHold * :call <SID>show_hover_doc()
 
-set t_Co=256
-set background=dark
-colorscheme onedark
+colorscheme nord
 highlight Normal ctermbg=NONE
 highlight nonText ctermbg=NONE
 
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 
-let g:NERDTreeToggle = '<c-n>'
+set expandtab
+set shiftwidth=2
+set softtabstop=2
+
+nmap <F6> :NERDTreeToggle<CR>
+let NERDTreeShowHidden=1
+
 
 filetype plugin indent on
 syntax on
@@ -137,6 +141,8 @@ let g:rustfmt_autosave = 1
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
+
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
