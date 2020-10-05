@@ -41,7 +41,6 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 let g:coc_global_extensions = [
   \ 'coc-tsserver'
   \ ]
-
 " Initialize plugin system
 call plug#end()
 
@@ -198,6 +197,7 @@ set expandtab
 set shiftwidth=2
 set softtabstop=2
 set autoread
+set hidden
 
 if has('persistent_undo')
   set undofile
@@ -264,9 +264,6 @@ endtry
 
 " Don't dispay mode in command line (airilne already shows it)
 set noshowmode
-
-" Set floating window to be slightly transparent
-set winbl=10
 
 set number relativenumber
 
