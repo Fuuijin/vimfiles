@@ -50,7 +50,7 @@ set nowritebackup
 set cmdheight=2
 set updatetime=300
 set shortmess+=c
-
+set cmdheight=1
 try
 " === Denite setup ==="
 " Use ripgrep for searching current directory for files
