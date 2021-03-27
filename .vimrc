@@ -4,9 +4,7 @@
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.vim/plugged')
 Plug 'junegunn/vim-easy-align'
-Plug 'rust-lang/rust.vim'
 Plug 'https://github.com/junegunn/vim-github-dashboard.git'
-Plug 'SirVer/ultisnips'  
 Plug 'honza/vim-snippets'
 Plug 'scrooloose/nerdtree'
 Plug 'vim-syntastic/syntastic'
@@ -20,10 +18,6 @@ else
   Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
-Plug 'pangloss/vim-javascript'
-Plug 'leafgarland/typescript-vim'
-Plug 'peitalin/vim-jsx-typescript'
-Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plug 'jparise/vim-graphql'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -40,9 +34,15 @@ Plug 'hail2u/vim-css3-syntax'
 Plug 'gko/vim-coloresque'
 Plug 'tpope/vim-haml'
 Plug 'mattn/emmet-vim'
+Plug 'sheerun/vim-polyglot'
+Plug 'pangloss/vim-javascript'
+Plug 'HerringtonDarkholme/yats.vim'
+Plug 'evanleck/vim-svelte'
+Plug 'prettier/vim-prettier', { 'do': 'npm install'  }
 
 call plug#end()
 
+syntax on
 set hidden
 set nobackup
 set nowritebackup
@@ -57,6 +57,9 @@ set fileencodings=utf-8
 set backspace=indent,eol,start
 let mapleader=','
 
+let g:svelte_preprocessors = ['typescript']
+
+
 nnoremap n nzzzv
 nnoremap N Nzzzv
 
@@ -65,6 +68,8 @@ if exists("*fugitive#statusline")
 endif
 
 command! FixWhitespace :%s/\s\+$//e
+
+nnoremap <leader><leader> <C-^>
 
 noremap <Leader>ga :Gwrite<CR>
 noremap <Leader>gc :Gcommit<CR>
@@ -75,12 +80,8 @@ noremap <Leader>gb :Gblame<CR>
 noremap <Leader>gd :Gvdiff<CR>
 noremap <Leader>gr :Gremove<CR>
 
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<c-b>"
-let g:UltiSnipsEditSplit="vertical"
-
 nnoremap <silent> <leader><space> :noh<cr>
+nnoremap <leader>s :wa<cr>
 
 try
 " === Denite setup ==="
@@ -206,23 +207,27 @@ nmap <leader>do <Plug>(coc-codeaction)
 
 nmap <leader>rn <Plug>(coc-rename)
 
+nnoremap <A-j> :m .+1<CR>==
+nnoremap <A-k> :m .-2<CR>==
+inoremap <A-j> <Esc>:m .+1<CR>==gi
+inoremap <A-k> <Esc>:m .-2<CR>==gi
+vnoremap <A-j> :m '>+1<CR>gv=gv
+vnoremap <A-k> :m '<-2<CR>gv=gv
+
 nnoremap <silent> K :call CocAction('doHover')<CR>
-function! ShowDocIfNoDiagnostic(timer_id)
-  if (coc#util#has_float() == 0)
-    silent call CocActionAsync('doHover')
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('')
+  else
+    call CocAction('doHover')
   endif
 endfunction
 
-function! s:show_hover_doc()
-  call timer_start(500, 'ShowDocIfNoDiagnostic')
-endfunction
-
-autocmd CursorHoldI * :call <SID>show_hover_doc()
-autocmd CursorHold * :call <SID>show_hover_doc()
-
+if (has("termguicolors"))
+  set termguicolors
+endif
+set background=dark
 colorscheme nord
-highlight Normal ctermbg=NONE
-highlight nonText ctermbg=NONE
 
 set expandtab
 set shiftwidth=2
@@ -316,3 +321,8 @@ nmap <C-h> <C-w>h
 nmap <C-j> <C-w>j
 nmap <C-k> <C-w>k
 nmap <C-l> <C-w>l
+
+" Prettier Settings
+let g:prettier#quickfix_enabled = 0
+let g:prettier#autoformat_require_pragma = 0
+au BufWritePre *.css,*.svelte,*.pcss,*.html,*.ts,*.js,*.json PrettierAsync
